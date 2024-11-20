@@ -43,19 +43,19 @@
             color: #ffffff;
         }
         .answers button.agree {
-            background-color: #28a745; /* Vert pour d'accord */
+            background-color: #28a745;
         }
         .answers button.agree:hover {
             background-color: #218838;
         }
         .answers button.neutral {
-            background-color: #6c757d; /* Gris pour neutre */
+            background-color: #6c757d;
         }
         .answers button.neutral:hover {
             background-color: #5a6268;
         }
         .answers button.disagree {
-            background-color: #ff9800; /* Orange pour pas d'accord */
+            background-color: #ff9800;
         }
         .answers button.disagree:hover {
             background-color: #e68900;
@@ -87,28 +87,49 @@
 
     <script>
         const questions = [
-            { text: "Un collègue change de méthode sans vous prévenir. Quelle est votre réaction ?", dimensions: ["Flexibilité", "Collaboration"] },
-            { text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?", dimensions: ["Gestion du Stress", "Analyse"] },
-            { text: "Un projet nécessite de remettre en cause une règle établie. Quelle est votre position ?", dimensions: ["Créativité", "Analyse"] },
-            { text: "Un conflit éclate dans votre équipe. Que faites-vous ?", dimensions: ["Collaboration", "Gestion du Stress"] },
-            { text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?", dimensions: ["Résilience", "Flexibilité"] },
-            { text: "On vous demande de travailler sur un nouveau projet en dehors de vos compétences. Que faites-vous ?", dimensions: ["Créativité", "Collaboration"] },
-            { text: "Vous devez gérer plusieurs tâches simultanément. Quelle est votre stratégie ?", dimensions: ["Gestion du Stress", "Flexibilité"] },
-            { text: "Un collègue propose une idée totalement différente de la vôtre. Que faites-vous ?", dimensions: ["Collaboration", "Analyse"] },
-            { text: "Comment réagissez-vous face à un changement de dernière minute ?", dimensions: ["Flexibilité", "Résilience"] },
-            { text: "On vous demande d'innover pour un projet important. Comment procédez-vous ?", dimensions: ["Créativité", "Analyse"] },
-            { text: "Vous devez présenter un projet devant un groupe important. Quelle est votre attitude ?", dimensions: ["Gestion du Stress", "Collaboration"] },
-            { text: "Un problème technique bloque un projet. Quelle est votre réaction ?", dimensions: ["Analyse", "Résilience"] },
-            { text: "Un client critique fortement votre travail. Que faites-vous ?", dimensions: ["Résilience", "Collaboration"] },
-            { text: "Vous êtes chargé de coordonner une équipe avec des points de vue divergents. Comment procédez-vous ?", dimensions: ["Collaboration", "Flexibilité"] },
-            { text: "Une deadline importante est avancée. Quelle est votre réaction ?", dimensions: ["Gestion du Stress", "Résilience"] },
-            { text: "Vous devez expliquer une décision difficile à votre équipe. Comment vous y prenez-vous ?", dimensions: ["Analyse", "Collaboration"] },
-            { text: "Vous avez l'opportunité de prendre des responsabilités supplémentaires. Que faites-vous ?", dimensions: ["Flexibilité", "Créativité"] },
-            { text: "Un collègue vous demande de l'aider sur un projet en retard. Que faites-vous ?", dimensions: ["Collaboration", "Résilience"] },
-            { text: "Vous remarquez une erreur dans un processus clé. Quelle est votre réaction ?", dimensions: ["Analyse", "Flexibilité"] },
-            { text: "Vous devez travailler avec une personne ayant des habitudes très différentes des vôtres. Que faites-vous ?", dimensions: ["Collaboration", "Résilience"] }
+            {
+                text: "Un collègue change de méthode sans vous prévenir. Quelle est votre réaction ?",
+                dimensions: ["Flexibilité", "Collaboration"],
+                options: [
+                    "J'adapte ma méthode immédiatement.",
+                    "Je propose une discussion.",
+                    "Je continue avec ma méthode.",
+                    "Je demande des clarifications."
+                ]
+            },
+            {
+                text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?",
+                dimensions: ["Gestion du Stress", "Analyse"],
+                options: [
+                    "Je me concentre et travaille rapidement.",
+                    "J'analyse calmement la situation.",
+                    "Je demande de l'aide.",
+                    "Je repousse la tâche."
+                ]
+            },
+            {
+                text: "Un conflit éclate dans votre équipe. Que faites-vous ?",
+                dimensions: ["Collaboration", "Gestion du Stress"],
+                options: [
+                    "J'interviens immédiatement.",
+                    "J'observe avant d'agir.",
+                    "Je délègue à un supérieur.",
+                    "Je laisse l'équipe gérer."
+                ]
+            },
+            {
+                text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?",
+                dimensions: ["Résilience", "Flexibilité"],
+                options: [
+                    "Je prends le retour comme une opportunité.",
+                    "Je discute pour clarifier.",
+                    "Je me sens démotivé.",
+                    "J'ignore le retour."
+                ]
+            }
         ];
 
+        let currentQuestionIndex = 0;
         const results = {
             "Flexibilité": 0,
             "Collaboration": 0,
@@ -118,8 +139,6 @@
             "Résilience": 0
         };
 
-        let currentQuestionIndex = 0;
-
         function showQuestion() {
             const questionContainer = document.getElementById("question-container");
             const answersContainer = document.getElementById("answers");
@@ -128,13 +147,12 @@
                 const question = questions[currentQuestionIndex];
                 questionContainer.textContent = question.text;
 
-                answersContainer.innerHTML = `
-                    <button class="agree" onclick="submitAnswer(5)">Tout à fait d'accord</button>
-                    <button class="agree" onclick="submitAnswer(4)">Plutôt d'accord</button>
-                    <button class="neutral" onclick="submitAnswer(3)">Neutre</button>
-                    <button class="disagree" onclick="submitAnswer(2)">Plutôt pas d'accord</button>
-                    <button class="disagree" onclick="submitAnswer(1)">Pas du tout d'accord</button>
-                `;
+                answersContainer.innerHTML = question.options
+                    .map(
+                        (option, index) =>
+                            `<button onclick="submitAnswer(${index + 1})">${option}</button>`
+                    )
+                    .join("");
             } else {
                 showResults();
             }
@@ -142,7 +160,7 @@
 
         function submitAnswer(score) {
             const question = questions[currentQuestionIndex];
-            question.dimensions.forEach(dimension => {
+            question.dimensions.forEach((dimension) => {
                 results[dimension] += score;
             });
 
@@ -151,43 +169,57 @@
         }
 
         function showResults() {
-            const card = document.querySelector('.card');
-            const totalQuestions = questions.length;
+            const card = document.querySelector(".card");
 
             card.innerHTML = `
                 <h1 class="title">Résultats</h1>
                 <p>Voici vos scores par catégorie :</p>
                 <ul>
-                    ${Object.entries(results).map(([dimension, score]) => `<li><strong>${dimension} :</strong> ${score} / ${(totalQuestions * 5) / 2}</li>`).join('')}
+                    ${Object.entries(results)
+                        .map(([dimension, score]) => `<li><strong>${dimension} :</strong> ${score} points</li>`)
+                        .join("")}
                 </ul>
-                <p><strong>Analyse :</strong> ${getAnalysis()}</p>
-                <a href="#" class="download-btn" onclick="downloadResults()">Télécharger le rapport</a>
+                <p><strong>Analyse :</strong></p>
+                ${getDetailedAnalysis()}
+                <a href="#" class="download-btn" onclick="downloadResults()">Télécharger le rapport complet</a>
             `;
         }
 
-        function getAnalysis() {
-            const highScores = Object.entries(results).filter(([_, score]) => score >= 50);
-            if (highScores.length === 0) {
-                return "Vous avez plusieurs axes d'amélioration. Travaillez sur votre flexibilité et votre gestion du stress.";
-            }
-            return `Vous excellez dans : ${highScores.map(([dimension]) => dimension).join(", ")}. Continuez à cultiver ces compétences !`;
+        function getDetailedAnalysis() {
+            const analysis = Object.entries(results)
+                .map(([dimension, score]) => {
+                    if (score >= 15) {
+                        return `<p><strong>${dimension} :</strong> Vous excellez dans cette catégorie, bravo ! Continuez à développer vos compétences.</p>`;
+                    } else if (score >= 10) {
+                        return `<p><strong>${dimension} :</strong> Vous êtes performant(e), mais il y a des marges d'amélioration.</p>`;
+                    } else {
+                        return `<p><strong>${dimension} :</strong> Cette catégorie est un axe d'amélioration. Travaillez dessus pour progresser.</p>`;
+                    }
+                })
+                .join("");
+            return analysis;
         }
 
         function downloadResults() {
-            const totalQuestions = questions.length;
-            const details = Object.entries(results)
-                .map(([dimension, score]) => `${dimension}: ${score} / ${(totalQuestions * 5) / 2}`)
-                .join("\n");
-
-            const analysis = getAnalysis();
-
             const report = `
                 Résultats du Test RH Avancé
                 ---------------------------
-                ${details}
+                ${Object.entries(results)
+                    .map(([dimension, score]) => `${dimension}: ${score} points`)
+                    .join("\n")}
 
                 Analyse :
-                ${analysis}
+                ${Object.entries(results)
+                    .map(([dimension, score]) => {
+                        if (score >= 15) {
+                            return `${dimension}: Vous excellez dans cette catégorie.`;
+                        } else if (score >= 10) {
+                            return `${dimension}: Bonnes performances, mais des marges d'amélioration.`;
+                        } else {
+                            return `${dimension}: Axe d'amélioration prioritaire.`;
+                        }
+                    })
+                    .join("\n")}
             `;
 
             const blob = new Blob([report], { type: "text/plain" });
@@ -201,9 +233,7 @@
             URL.revokeObjectURL(url);
         }
 
-        // Lancer le test
         showQuestion();
     </script>
 </body>
 </html>
-
