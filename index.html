@@ -535,6 +535,23 @@
             "Responsabilité": 0
         };
 
+        const maxScores = {
+            "Flexibilité": 7,
+            "Collaboration": 11,
+            "Gestion du Stress": 2,
+            "Analyse": 4,
+            "Résilience": 4,
+            "Organisation": 4,
+            "Leadership": 5,
+            "Créativité": 4,
+            "Apprentissage": 3,
+            "Empathie": 3,
+            "Adaptabilité": 4,
+            "Initiative": 6,
+            "Communication": 3,
+            "Responsabilité": 1
+        };
+
         function showQuestion() {
             const questionContainer = document.getElementById("question-container");
             const answersContainer = document.getElementById("answers");
@@ -576,31 +593,16 @@
             card.innerHTML = `
                 <h1 class="title">Résultats</h1>
                 ${generateResultBars()}
+                ${generateWrittenFeedback()}
                 <a href="#" class="download-btn" onclick="downloadResults()">Télécharger le rapport</a>
             `;
         }
 
         function generateResultBars() {
-            const maxScores = {
-                "Flexibilité": 10,
-                "Collaboration": 14,
-                "Gestion du Stress": 4,
-                "Analyse": 6,
-                "Résilience": 6,
-                "Organisation": 6,
-                "Leadership": 8,
-                "Créativité": 4,
-                "Apprentissage": 5,
-                "Empathie": 4,
-                "Adaptabilité": 5,
-                "Initiative": 7,
-                "Communication": 4,
-                "Responsabilité": 1
-            };
-
             return Object.entries(results)
                 .map(([dimension, score]) => {
-                    const percentage = (score / maxScores[dimension]) * 100;
+                    const maxScore = maxScores[dimension] || 1;
+                    const percentage = (score / maxScore) * 100;
                     const barColor =
                         percentage >= 75
                             ? "green"
@@ -611,7 +613,7 @@
                         <div>
                             <p><strong>${dimension}</strong>: ${Math.round(percentage)}%</p>
                             <div class="progress-bar-container">
-                                <div class="progress-bar ${barColor}" style="width: ${percentage}%;"></div>
+                                <div class="progress-bar ${barColor}" style="width: ${Math.min(percentage, 100)}%;"></div>
                             </div>
                         </div>
                     `;
@@ -619,36 +621,49 @@
                 .join("");
         }
 
+        function generateWrittenFeedback() {
+            let feedback = '<div class="feedback">';
+            for (let [dimension, score] of Object.entries(results)) {
+                const maxScore = maxScores[dimension] || 1;
+                const percentage = (score / maxScore) * 100;
+                let advice = "";
+
+                if (percentage >= 75) {
+                    advice = `Vous avez une excellente ${dimension}. Continuez à capitaliser sur cette force pour vous adapter efficacement aux changements.`;
+                } else if (percentage >= 50) {
+                    advice = `Votre ${dimension} est bonne, mais il y a de la place pour l'amélioration. Envisagez de développer davantage cette compétence pour mieux gérer les situations de changement.`;
+                } else {
+                    advice = `Il semble que votre ${dimension} pourrait bénéficier d'une attention particulière. Travailler sur cette compétence vous aidera à mieux vous adapter aux changements.`;
+                }
+
+                feedback += `<h3>${dimension}</h3><p>${advice}</p>`;
+            }
+            feedback += '</div>';
+            return feedback;
+        }
+
         function downloadResults() {
-            const report = `
-Résultats du Test d'adaptation au changement
+            let report = `Résultats du Test d'adaptation au changement
 ---------------------------------------------
-${Object.entries(results)
-    .map(
-        ([dimension, score]) =>
-            `${dimension}: ${score} points (${(
-                (score /
-                    {
-                        "Flexibilité": 10,
-                        "Collaboration": 14,
-                        "Gestion du Stress": 4,
-                        "Analyse": 6,
-                        "Résilience": 6,
-                        "Organisation": 6,
-                        "Leadership": 8,
-                        "Créativité": 4,
-                        "Apprentissage": 5,
-                        "Empathie": 4,
-                        "Adaptabilité": 5,
-                        "Initiative": 7,
-                        "Communication": 4,
-                        "Responsabilité": 1
-                    }[dimension]) *
-                100
-            ).toFixed(2)}%)`
-    )
-    .join("\n")}
-            `;
+
+`;
+            for (let [dimension, score] of Object.entries(results)) {
+                const maxScore = maxScores[dimension] || 1;
+                const percentage = (score / maxScore) * 100;
+                report += `${dimension}: ${score} points (${percentage.toFixed(2)}%)\n`;
+
+                let advice = "";
+
+                if (percentage >= 75) {
+                    advice = `Vous avez une excellente ${dimension}. Continuez à capitaliser sur cette force pour vous adapter efficacement aux changements.`;
+                } else if (percentage >= 50) {
+                    advice = `Votre ${dimension} est bonne, mais il y a de la place pour l'amélioration. Envisagez de développer davantage cette compétence pour mieux gérer les situations de changement.`;
+                } else {
+                    advice = `Il semble que votre ${dimension} pourrait bénéficier d'une attention particulière. Travailler sur cette compétence vous aidera à mieux vous adapter aux changements.`;
+                }
+
+                report += `${advice}\n\n`;
+            }
 
             const blob = new Blob([report], { type: "text/plain" });
             const url = URL.createObjectURL(blob);
@@ -665,4 +680,3 @@ ${Object.entries(results)
     </script>
 </body>
 </html>
-
