@@ -1,161 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test GitHub Pages</title>
-</head>
-<body>
-    <h1>Le site fonctionne !</h1>
-</body>
-</html>
-
-<div id="personality-test-widget" style="width:100%;max-width:600px;margin:0 auto;">
+    <title>Test d'Adaptabilité au Changement</title>
     <style>
-        /* Ajout de la classe hidden */
-        .hidden {
-            display: none;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f7f7f7;
         }
-
-        /* Vos autres styles CSS ici */
         .card {
+            max-width: 700px;
+            margin: 0 auto;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            font-family: Arial, sans-serif;
         }
         .title {
             text-align: center;
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 20px;
-        }
-        .start-btn, .reset-btn {
-            display: block;
-            margin: 0 auto;
-            padding: 10px 20px;
-            background: #3b82f6;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .start-btn:hover, .reset-btn:hover {
-            background: #2563eb;
-        }
-        .progress {
-            background: #e5e7eb;
-            border-radius: 4px;
-            overflow: hidden;
-            height: 10px;
-            margin-bottom: 20px;
-        }
-        .progress-bar {
-            background: #3b82f6;
-            height: 100%;
-            transition: width 0.3s;
         }
         .question {
+            margin: 20px 0;
             font-size: 18px;
-            margin-bottom: 20px;
-            text-align: center;
         }
-        .button {
+        .answers button {
             display: block;
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        .answers button:hover {
+            background-color: #0056b3;
+        }
+        .results {
             text-align: center;
+            margin-top: 20px;
         }
-        .button:hover {
-            background: #e5e7eb;
+        .download-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .result-bar {
-            background: #e5e7eb;
-            border-radius: 4px;
-            overflow: hidden;
-            height: 20px;
-        }
-        .result-fill {
-            height: 100%;
+        .download-btn:hover {
+            background-color: #218838;
         }
     </style>
+</head>
+<body>
     <div class="card">
-        <div id="start-section">
-            <h1 class="title">Test de Personnalité</h1>
-            <p style="text-align: center; margin-bottom: 20px;">Découvrez votre profil de personnalité en répondant à quelques questions simples.</p>
-            <button class="start-btn" id="start-quiz">Commencer le test</button>
+        <div id="quiz-section">
+            <h1 class="title">Test d'Adaptabilité au Changement</h1>
+            <div id="question-container" class="question"></div>
+            <div id="answers" class="answers"></div>
         </div>
-        <div id="quiz-section" class="hidden">
-            <h1 class="title">Test de Personnalité</h1>
-            <div class="progress">
-                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
-            </div>
-            <div id="question" class="question"></div>
-            <div id="answers"></div>
+        <div id="results-section" class="hidden">
+            <h2 class="title">Résultats</h2>
+            <p id="score-display"></p>
+            <div id="category-results"></div>
+            <div id="recommendations"></div>
+            <button class="download-btn" onclick="downloadResults()">Télécharger mon rapport</button>
         </div>
-        <div id="results-section" class="hidden"></div>
     </div>
+
     <script>
-    (function() {
-        const widget = document.getElementById('personality-test-widget');
         const questions = [
-            { text: "J'aime explorer de nouvelles idées", trait: "openness" },
-            { text: "Je suis organisé(e) et méthodique", trait: "conscientiousness" },
-            { text: "J'aime être entouré(e) de gens", trait: "extraversion" },
-            { text: "Je suis attentif(ve) aux autres", trait: "agreeableness" },
-            { text: "Je reste calme sous pression", trait: "neuroticism" },
-            { text: "Je suis créatif(ve)", trait: "openness" },
-            { text: "Je planifie tout à l'avance", trait: "conscientiousness" },
-            { text: "Je communique facilement", trait: "extraversion" },
-            { text: "J'aide volontiers les autres", trait: "agreeableness" },
-            { text: "Je gère bien mes émotions", trait: "neuroticism" }
+            { text: "Je m'adapte rapidement à de nouveaux outils ou processus.", category: "Flexibilité" },
+            { text: "Je trouve des solutions innovantes face à des problèmes inattendus.", category: "Innovation" },
+            { text: "Je reste calme et efficace sous pression.", category: "Gestion du Stress" },
+            { text: "Je modifie mes priorités en fonction des besoins de l'entreprise.", category: "Flexibilité" },
+            { text: "Je propose souvent des idées pour améliorer les processus.", category: "Innovation" }
         ];
 
-        const traits = {
-            openness: { name: 'Ouverture', color: '#3b82f6' },
-            conscientiousness: { name: 'Conscience', color: '#10b981' },
-            extraversion: { name: 'Extraversion', color: '#f59e0b' },
-            agreeableness: { name: 'Agréabilité', color: '#ec4899' },
-            neuroticism: { name: 'Stabilité émotionnelle', color: '#8b5cf6' }
+        const categories = {
+            "Flexibilité": 0,
+            "Innovation": 0,
+            "Gestion du Stress": 0
         };
 
-        let currentQuestion = 0;
-        let answers = [];
-
-        function startQuiz() {
-            widget.querySelector('#start-section').classList.add('hidden');
-            widget.querySelector('#quiz-section').classList.remove('hidden');
-            showQuestion();
-        }
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
 
         function showQuestion() {
-            const question = questions[currentQuestion];
-            widget.querySelector('#question').textContent = question.text;
-            widget.querySelector('#progress-bar').style.width = `${(currentQuestion + 1) * 10}%`;
+            const questionContainer = document.getElementById("question-container");
+            const answersContainer = document.getElementById("answers");
+            const currentQuestion = questions[currentQuestionIndex];
 
-            const answersHtml = [
-                { value: 1, text: 'Pas du tout d\'accord' },
-                { value: 2, text: 'Plutôt pas d\'accord' },
-                { value: 3, text: 'Neutre' },
-                { value: 4, text: 'Plutôt d\'accord' },
-                { value: 5, text: 'Tout à fait d\'accord' }
-            ].map(answer => `
-                <button class="button" data-value="${answer.value}">
-                    ${answer.text}
-                </button>
-            `).join('');
-
-            widget.querySelector('#answers').innerHTML = answersHtml;
+            questionContainer.textContent = currentQuestion.text;
+            answersContainer.innerHTML = `
+                <button onclick="submitAnswer(1)">Pas du tout d'accord</button>
+                <button onclick="submitAnswer(2)">Plutôt pas d'accord</button>
+                <button onclick="submitAnswer(3)">Neutre</button>
+                <button onclick="submitAnswer(4)">Plutôt d'accord</button>
+                <button onclick="submitAnswer(5)">Tout à fait d'accord</button>
+            `;
         }
 
-        function answer(value) {
-            answers.push(parseInt(value));
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
+        function submitAnswer(points) {
+            const currentQuestion = questions[currentQuestionIndex];
+            totalScore += points;
+            categories[currentQuestion.category] += points;
+
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
                 showQuestion();
             } else {
                 showResults();
@@ -163,55 +127,54 @@
         }
 
         function showResults() {
-            const results = {};
-            Object.keys(traits).forEach(trait => {
-                const scores = questions.map((q, i) => q.trait === trait ? answers[i] : null)
-                    .filter(score => score !== null);
-                results[trait] = (scores.reduce((a, b) => a + b, 0) / scores.length / 5) * 100;
-            });
+            document.getElementById("quiz-section").classList.add("hidden");
+            document.getElementById("results-section").classList.remove("hidden");
 
-            const resultsHtml = Object.entries(traits).map(([trait, info]) => `
-                <div style="margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <strong>${info.name}</strong>
-                        <span>${Math.round(results[trait])}%</span>
-                    </div>
-                    <div class="result-bar">
-                        <div class="result-fill" 
-                             style="width: ${results[trait]}%; background: ${info.color}">
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            const scoreDisplay = document.getElementById("score-display");
+            const categoryResults = document.getElementById("category-results");
+            const recommendations = document.getElementById("recommendations");
 
-            widget.querySelector('#quiz-section').classList.add('hidden');
-            widget.querySelector('#results-section').classList.remove('hidden');
-            widget.querySelector('#results-section').innerHTML = `
-                <h2 class="title">Vos Résultats</h2>
-                ${resultsHtml}
-                <button class="reset-btn" id="reset-quiz">Recommencer le test</button>
+            scoreDisplay.textContent = `Votre score total : ${totalScore} sur ${questions.length * 5}`;
+
+            let categoryDetails = "";
+            for (let category in categories) {
+                categoryDetails += `<p><strong>${category} :</strong> ${categories[category]} sur ${(questions.filter(q => q.category === category).length * 5)}</p>`;
+            }
+            categoryResults.innerHTML = categoryDetails;
+
+            recommendations.innerHTML = `
+                <h3>Recommandations :</h3>
+                ${getRecommendations(totalScore)}
             `;
         }
 
-        function resetQuiz() {
-            currentQuestion = 0;
-            answers = [];
-            widget.querySelector('#results-section').classList.add('hidden');
-            widget.querySelector('#start-section').classList.remove('hidden');
-            widget.querySelector('#quiz-section').classList.add('hidden');
+        function getRecommendations(score) {
+            if (score >= 20) {
+                return "<p>Votre adaptabilité est excellente ! Continuez à cultiver cette force.</p>";
+            } else if (score >= 15) {
+                return "<p>Votre adaptabilité est bonne, mais il y a des axes d'amélioration.</p>";
+            } else {
+                return "<p>Travaillez sur votre flexibilité et votre gestion du stress pour mieux vous adapter.</p>";
+            }
         }
 
-        // Ajout des écouteurs d'événements
-        widget.addEventListener('click', function(event) {
-            if (event.target.id === 'start-quiz') {
-                startQuiz();
-            } else if (event.target.classList.contains('button') && event.target.dataset.value) {
-                answer(event.target.dataset.value);
-            } else if (event.target.id === 'reset-quiz') {
-                resetQuiz();
-            }
-        });
+        function downloadResults() {
+            const results = questions.map((q, i) => `Question ${i + 1}: ${q.text}\nCatégorie : ${q.category}\nScore : ${categories[q.category]}`).join("\n\n");
+            const total = `\n\nScore total : ${totalScore} sur ${questions.length * 5}`;
+            const details = `\n\nDétails par catégorie :\n${Object.entries(categories).map(([cat, score]) => `${cat}: ${score}`).join("\n")}`;
 
-    })();
+            const blob = new Blob([results + total + details], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "rapport_test_adaptabilite.txt";
+            a.click();
+
+            URL.revokeObjectURL(url);
+        }
+
+        showQuestion();
     </script>
-</div>
+</body>
+</html>
