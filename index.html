@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test RH Avancé</title>
+    <title>Test d'adaptation au changement</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: #121212; /* Fond sombre */
+            color: #ffffff; /* Texte clair */
             margin: 0;
             padding: 20px;
         }
         .card {
             max-width: 700px;
             margin: 0 auto;
-            background: #1e1e1e;
+            background: #1e1e1e; /* Fond légèrement plus clair */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -25,11 +25,12 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
-            color: #00ff7f;
+            color: #00ff7f; /* Vert lumineux */
         }
         .question {
             font-size: 18px;
             margin: 20px 0;
+            color: #ffffff; /* Texte toujours blanc pour le contraste */
         }
         .answers button {
             display: block;
@@ -40,7 +41,7 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            color: #ffffff;
+            color: #ffffff; /* Texte blanc */
         }
         .answers button.agree {
             background-color: #28a745;
@@ -64,6 +65,26 @@
             text-align: center;
             margin-top: 20px;
         }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #3a3a3a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            border-radius: 10px;
+        }
+        .progress-bar.green {
+            background-color: #28a745;
+        }
+        .progress-bar.orange {
+            background-color: #ffc107;
+        }
+        .progress-bar.red {
+            background-color: #dc3545;
+        }
         .download-btn {
             display: inline-block;
             margin-top: 20px;
@@ -80,7 +101,7 @@
 </head>
 <body>
     <div class="card">
-        <h1 class="title">Test RH Avancé</h1>
+        <h1 class="title">Test d'adaptation au changement</h1>
         <div id="question-container" class="question"></div>
         <div id="answers" class="answers"></div>
     </div>
@@ -135,7 +156,6 @@
             "Collaboration": 0,
             "Gestion du Stress": 0,
             "Analyse": 0,
-            "Créativité": 0,
             "Résilience": 0
         };
 
@@ -173,52 +193,45 @@
 
             card.innerHTML = `
                 <h1 class="title">Résultats</h1>
-                <p>Voici vos scores par catégorie :</p>
-                <ul>
-                    ${Object.entries(results)
-                        .map(([dimension, score]) => `<li><strong>${dimension} :</strong> ${score} points</li>`)
-                        .join("")}
-                </ul>
-                <p><strong>Analyse :</strong></p>
-                ${getDetailedAnalysis()}
-                <a href="#" class="download-btn" onclick="downloadResults()">Télécharger le rapport complet</a>
+                ${generateResultBars()}
+                <a href="#" class="download-btn" onclick="downloadResults()">Télécharger le rapport</a>
             `;
         }
 
-        function getDetailedAnalysis() {
-            const analysis = Object.entries(results)
+        function generateResultBars() {
+            return Object.entries(results)
                 .map(([dimension, score]) => {
-                    if (score >= 15) {
-                        return `<p><strong>${dimension} :</strong> Vous excellez dans cette catégorie, bravo ! Continuez à développer vos compétences.</p>`;
-                    } else if (score >= 10) {
-                        return `<p><strong>${dimension} :</strong> Vous êtes performant(e), mais il y a des marges d'amélioration.</p>`;
-                    } else {
-                        return `<p><strong>${dimension} :</strong> Cette catégorie est un axe d'amélioration. Travaillez dessus pour progresser.</p>`;
-                    }
+                    const percentage = (score / (questions.length * 5)) * 100;
+                    const barColor =
+                        percentage >= 75
+                            ? "green"
+                            : percentage >= 50
+                            ? "orange"
+                            : "red";
+                    return `
+                        <div>
+                            <p><strong>${dimension}</strong>: ${Math.round(percentage)}%</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar ${barColor}" style="width: ${percentage}%;"></div>
+                            </div>
+                        </div>
+                    `;
                 })
                 .join("");
-            return analysis;
         }
 
         function downloadResults() {
             const report = `
-                Résultats du Test RH Avancé
-                ---------------------------
+                Résultats du Test d'adaptation au changement
+                ---------------------------------------------
                 ${Object.entries(results)
-                    .map(([dimension, score]) => `${dimension}: ${score} points`)
-                    .join("\n")}
-
-                Analyse :
-                ${Object.entries(results)
-                    .map(([dimension, score]) => {
-                        if (score >= 15) {
-                            return `${dimension}: Vous excellez dans cette catégorie.`;
-                        } else if (score >= 10) {
-                            return `${dimension}: Bonnes performances, mais des marges d'amélioration.`;
-                        } else {
-                            return `${dimension}: Axe d'amélioration prioritaire.`;
-                        }
-                    })
+                    .map(
+                        ([dimension, score]) =>
+                            `${dimension}: ${score} points (${(
+                                (score / (questions.length * 5)) *
+                                100
+                            ).toFixed(2)}%)`
+                    )
                     .join("\n")}
             `;
 
@@ -227,7 +240,7 @@
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "rapport_test_rh.txt";
+            a.download = "rapport_test_adaptation.txt";
             a.click();
 
             URL.revokeObjectURL(url);
