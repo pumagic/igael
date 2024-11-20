@@ -95,26 +95,426 @@
 
     <script>
         const questions = [
-            { text: "Un collègue change de méthode sans vous prévenir. Que faites-vous ?", dimensions: ["Flexibilité", "Collaboration"], options: ["J'adapte immédiatement ma méthode.", "Je propose une discussion.", "Je continue avec ma méthode.", "Je demande des clarifications."] },
-            { text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?", dimensions: ["Gestion du Stress", "Analyse"], options: ["Je me concentre et travaille rapidement.", "J'analyse calmement la situation.", "Je demande de l'aide.", "Je repousse la tâche."] },
-            { text: "Un conflit éclate dans votre équipe. Que faites-vous ?", dimensions: ["Collaboration", "Leadership"], options: ["J'interviens immédiatement pour calmer la situation.", "J'observe avant d'agir.", "Je délègue à un supérieur.", "Je laisse l'équipe gérer seule."] },
-            { text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?", dimensions: ["Résilience", "Flexibilité"], options: ["Je prends le retour comme une opportunité.", "Je discute pour clarifier les points.", "Je me sens démotivé.", "J'ignore le retour."] },
-            { text: "On vous confie un projet complexe sans ressources. Que faites-vous ?", dimensions: ["Initiative", "Analyse"], options: ["Je trouve des solutions créatives.", "Je priorise les tâches essentielles.", "Je demande un support externe.", "Je signale les difficultés."] },
-            { text: "Vous devez collaborer avec une personne ayant des idées opposées. Que faites-vous ?", dimensions: ["Collaboration", "Résilience"], options: ["Je trouve un terrain d'entente.", "Je propose des compromis.", "Je me concentre sur mes idées.", "Je refuse de collaborer."] },
-            { text: "Un changement majeur est annoncé. Comment réagissez-vous ?", dimensions: ["Adaptabilité", "Flexibilité"], options: ["J'accueille le changement positivement.", "Je m'informe sur les impacts.", "J'exprime mes doutes.", "Je suis réticent au changement."] },
-            { text: "Vous devez utiliser un nouvel outil que vous ne maîtrisez pas. Que faites-vous ?", dimensions: ["Apprentissage", "Flexibilité"], options: ["Je m'y plonge immédiatement.", "Je demande une formation.", "Je prends mon temps pour m'y adapter.", "Je refuse de l'utiliser."] },
-            { text: "Votre équipe exprime des inquiétudes face à un changement. Que faites-vous ?", dimensions: ["Leadership", "Empathie"], options: ["Je les rassure et propose des solutions.", "Je m'assure de leur écoute active.", "Je leur dis d'accepter la situation.", "J'ignore leurs inquiétudes."] },
-            { text: "Vous avez plusieurs tâches importantes simultanément. Que faites-vous ?", dimensions: ["Organisation", "Gestion du Stress"], options: ["Je priorise les tâches.", "Je délègue si possible.", "Je fais tout en même temps.", "Je reporte certaines tâches."] },
-            { text: "Un collègue critique votre travail en réunion. Comment réagissez-vous ?", dimensions: ["Résilience", "Collaboration"], options: ["Je réponds calmement avec des faits.", "Je demande une clarification après la réunion.", "Je prends cela personnellement.", "Je reste silencieux et ignore."] },
-            { text: "On vous demande d'améliorer un processus inefficace. Que faites-vous ?", dimensions: ["Créativité", "Analyse"], options: ["Je propose une nouvelle solution immédiatement.", "Je m'appuie sur des cas existants.", "Je demande à quelqu'un d'autre de s'en occuper.", "Je ne fais pas de changement."] },
-            { text: "Votre manager vous confie un rapport urgent. Que faites-vous ?", dimensions: ["Organisation", "Initiative"], options: ["Je commence immédiatement et me concentre.", "Je demande des précisions sur le contenu.", "Je sollicite l'aide d'un collègue.", "Je signale que le délai est irréaliste."] },
-            { text: "Votre équipe est démotivée. Que faites-vous ?", dimensions: ["Leadership", "Empathie"], options: ["Je motive avec des encouragements.", "Je propose une discussion ouverte.", "Je les laisse gérer leur motivation.", "Je ne fais rien de particulier."] },
-            { text: "Vous remarquez un conflit latent dans une équipe. Comment réagissez-vous ?", dimensions: ["Collaboration", "Leadership"], options: ["J'interviens pour faciliter la discussion.", "Je prends des mesures pour éviter l'escalade.", "J'ignore la situation.", "Je transfère la responsabilité à un autre manager."] },
-            { text: "Un processus change soudainement. Comment gérez-vous cela ?", dimensions: ["Adaptabilité", "Flexibilité"], options: ["Je m'adapte immédiatement.", "Je demande des explications.", "Je suis réticent mais m'adapte avec le temps.", "Je résiste au changement."] },
-            { text: "Une tâche complexe arrive sans instructions. Que faites-vous ?", dimensions: ["Initiative", "Analyse"], options: ["Je fais des recherches pour commencer.", "Je demande des clarifications.", "Je remets la tâche à plus tard.", "Je délègue à quelqu'un d'autre."] },
-            { text: "Votre manager vous demande de travailler sur un domaine inconnu. Que faites-vous ?", dimensions: ["Apprentissage", "Initiative"], options: ["Je m'y mets immédiatement en apprenant.", "Je demande une formation.", "Je refuse et propose autre chose.", "Je cherche à éviter cette tâche."] },
-            { text: "Vous avez peu de temps pour un projet important. Comment vous organisez-vous ?", dimensions: ["Organisation", "Flexibilité"], options: ["Je priorise les tâches clés.", "Je demande une extension de délai.", "Je fais tout à moitié.", "Je reporte les projets moins importants."] },
-            { text: "Un collègue propose une idée nouvelle mais risquée. Que faites-vous ?", dimensions: ["Créativité", "Collaboration"], options: ["J'encourage l'idée et aide à l'améliorer.", "Je discute des avantages et des risques.", "Je préfère ne pas prendre de risques.", "Je rejette l'idée immédiatement."] }
+            {
+                text: "Un collègue change de méthode sans vous prévenir. Que faites-vous ?",
+                options: [
+                    {
+                        text: "J'adapte immédiatement ma méthode.",
+                        effects: { "Flexibilité": 2, "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je propose une discussion.",
+                        effects: { "Collaboration": 2 }
+                    },
+                    {
+                        text: "Je continue avec ma méthode.",
+                        effects: { "Flexibilité": -1 }
+                    },
+                    {
+                        text: "Je demande des clarifications.",
+                        effects: { "Collaboration": 1, "Flexibilité": 1 }
+                    }
+                ]
+            },
+            {
+                text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je me concentre et travaille rapidement.",
+                        effects: { "Gestion du Stress": 2, "Analyse": 1 }
+                    },
+                    {
+                        text: "J'analyse calmement la situation.",
+                        effects: { "Analyse": 2 }
+                    },
+                    {
+                        text: "Je demande de l'aide.",
+                        effects: { "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je repousse la tâche.",
+                        effects: { "Gestion du Stress": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Un conflit éclate dans votre équipe. Que faites-vous ?",
+                options: [
+                    {
+                        text: "J'interviens immédiatement pour calmer la situation.",
+                        effects: { "Leadership": 2, "Collaboration": 1 }
+                    },
+                    {
+                        text: "J'observe avant d'agir.",
+                        effects: { "Analyse": 1 }
+                    },
+                    {
+                        text: "Je délègue à un supérieur.",
+                        effects: { "Leadership": -1 }
+                    },
+                    {
+                        text: "Je laisse l'équipe gérer seule.",
+                        effects: { "Collaboration": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?",
+                options: [
+                    {
+                        text: "Je prends le retour comme une opportunité.",
+                        effects: { "Résilience": 2, "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je discute pour clarifier les points.",
+                        effects: { "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je me sens démotivé.",
+                        effects: { "Résilience": -1 }
+                    },
+                    {
+                        text: "J'ignore le retour.",
+                        effects: { "Flexibilité": -1 }
+                    }
+                ]
+            },
+            {
+                text: "On vous confie un projet complexe sans ressources. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je trouve des solutions créatives.",
+                        effects: { "Créativité": 2, "Initiative": 1 }
+                    },
+                    {
+                        text: "Je priorise les tâches essentielles.",
+                        effects: { "Organisation": 1 }
+                    },
+                    {
+                        text: "Je demande un support externe.",
+                        effects: { "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je signale les difficultés.",
+                        effects: { "Initiative": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Vous devez collaborer avec une personne ayant des idées opposées. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je trouve un terrain d'entente.",
+                        effects: { "Collaboration": 2, "Résilience": 1 }
+                    },
+                    {
+                        text: "Je propose des compromis.",
+                        effects: { "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je me concentre sur mes idées.",
+                        effects: { "Collaboration": -1 }
+                    },
+                    {
+                        text: "Je refuse de collaborer.",
+                        effects: { "Résilience": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Un changement majeur est annoncé. Comment réagissez-vous ?",
+                options: [
+                    {
+                        text: "J'accueille le changement positivement.",
+                        effects: { "Adaptabilité": 2, "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je m'informe sur les impacts.",
+                        effects: { "Analyse": 1 }
+                    },
+                    {
+                        text: "J'exprime mes doutes.",
+                        effects: { "Résilience": -1 }
+                    },
+                    {
+                        text: "Je suis réticent au changement.",
+                        effects: { "Adaptabilité": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Vous devez utiliser un nouvel outil que vous ne maîtrisez pas. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je m'y plonge immédiatement.",
+                        effects: { "Apprentissage": 2, "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je demande une formation.",
+                        effects: { "Apprentissage": 1 }
+                    },
+                    {
+                        text: "Je prends mon temps pour m'y adapter.",
+                        effects: { "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je refuse de l'utiliser.",
+                        effects: { "Adaptabilité": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Votre équipe exprime des inquiétudes face à un changement. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je les rassure et propose des solutions.",
+                        effects: { "Leadership": 2, "Empathie": 1 }
+                    },
+                    {
+                        text: "Je m'assure de leur écoute active.",
+                        effects: { "Empathie": 2 }
+                    },
+                    {
+                        text: "Je leur dis d'accepter la situation.",
+                        effects: { "Leadership": -1 }
+                    },
+                    {
+                        text: "J'ignore leurs inquiétudes.",
+                        effects: { "Empathie": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Vous avez plusieurs tâches importantes simultanément. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je priorise les tâches.",
+                        effects: { "Organisation": 2 }
+                    },
+                    {
+                        text: "Je délègue si possible.",
+                        effects: { "Leadership": 1 }
+                    },
+                    {
+                        text: "Je fais tout en même temps.",
+                        effects: { "Gestion du Stress": -1 }
+                    },
+                    {
+                        text: "Je reporte certaines tâches.",
+                        effects: { "Organisation": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Un collègue critique votre travail en réunion. Comment réagissez-vous ?",
+                options: [
+                    {
+                        text: "Je réponds calmement avec des faits.",
+                        effects: { "Résilience": 2, "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je demande une clarification après la réunion.",
+                        effects: { "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je prends cela personnellement.",
+                        effects: { "Résilience": -1 }
+                    },
+                    {
+                        text: "Je reste silencieux et ignore.",
+                        effects: { "Communication": -1 }
+                    }
+                ]
+            },
+            {
+                text: "On vous demande d'améliorer un processus inefficace. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je propose une nouvelle solution immédiatement.",
+                        effects: { "Créativité": 2, "Initiative": 1 }
+                    },
+                    {
+                        text: "Je m'appuie sur des cas existants.",
+                        effects: { "Analyse": 1 }
+                    },
+                    {
+                        text: "Je demande à quelqu'un d'autre de s'en occuper.",
+                        effects: { "Initiative": -1 }
+                    },
+                    {
+                        text: "Je ne fais pas de changement.",
+                        effects: { "Adaptabilité": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Votre manager vous confie un rapport urgent. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je commence immédiatement et me concentre.",
+                        effects: { "Organisation": 2, "Initiative": 1 }
+                    },
+                    {
+                        text: "Je demande des précisions sur le contenu.",
+                        effects: { "Communication": 1 }
+                    },
+                    {
+                        text: "Je sollicite l'aide d'un collègue.",
+                        effects: { "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je signale que le délai est irréaliste.",
+                        effects: { "Gestion du Stress": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Votre équipe est démotivée. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je motive avec des encouragements.",
+                        effects: { "Leadership": 2, "Empathie": 1 }
+                    },
+                    {
+                        text: "Je propose une discussion ouverte.",
+                        effects: { "Communication": 1 }
+                    },
+                    {
+                        text: "Je les laisse gérer leur motivation.",
+                        effects: { "Leadership": -1 }
+                    },
+                    {
+                        text: "Je ne fais rien de particulier.",
+                        effects: { "Empathie": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Vous remarquez un conflit latent dans une équipe. Comment réagissez-vous ?",
+                options: [
+                    {
+                        text: "J'interviens pour faciliter la discussion.",
+                        effects: { "Collaboration": 2, "Leadership": 1 }
+                    },
+                    {
+                        text: "Je prends des mesures pour éviter l'escalade.",
+                        effects: { "Analyse": 1 }
+                    },
+                    {
+                        text: "J'ignore la situation.",
+                        effects: { "Empathie": -1 }
+                    },
+                    {
+                        text: "Je transfère la responsabilité à un autre manager.",
+                        effects: { "Leadership": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Un processus change soudainement. Comment gérez-vous cela ?",
+                options: [
+                    {
+                        text: "Je m'adapte immédiatement.",
+                        effects: { "Adaptabilité": 2, "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je demande des explications.",
+                        effects: { "Communication": 1 }
+                    },
+                    {
+                        text: "Je suis réticent mais m'adapte avec le temps.",
+                        effects: { "Adaptabilité": 1 }
+                    },
+                    {
+                        text: "Je résiste au changement.",
+                        effects: { "Flexibilité": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Une tâche complexe arrive sans instructions. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je fais des recherches pour commencer.",
+                        effects: { "Initiative": 2, "Analyse": 1 }
+                    },
+                    {
+                        text: "Je demande des clarifications.",
+                        effects: { "Communication": 1 }
+                    },
+                    {
+                        text: "Je remets la tâche à plus tard.",
+                        effects: { "Initiative": -1 }
+                    },
+                    {
+                        text: "Je délègue à quelqu'un d'autre.",
+                        effects: { "Responsabilité": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Votre manager vous demande de travailler sur un domaine inconnu. Que faites-vous ?",
+                options: [
+                    {
+                        text: "Je m'y mets immédiatement en apprenant.",
+                        effects: { "Apprentissage": 2, "Initiative": 1 }
+                    },
+                    {
+                        text: "Je demande une formation.",
+                        effects: { "Apprentissage": 1 }
+                    },
+                    {
+                        text: "Je refuse et propose autre chose.",
+                        effects: { "Adaptabilité": -1 }
+                    },
+                    {
+                        text: "Je cherche à éviter cette tâche.",
+                        effects: { "Initiative": -1 }
+                    }
+                ]
+            },
+            {
+                text: "Vous avez peu de temps pour un projet important. Comment vous organisez-vous ?",
+                options: [
+                    {
+                        text: "Je priorise les tâches clés.",
+                        effects: { "Organisation": 2, "Flexibilité": 1 }
+                    },
+                    {
+                        text: "Je demande une extension de délai.",
+                        effects: { "Communication": 1 }
+                    },
+                    {
+                        text: "Je fais tout à moitié.",
+                        effects: { "Organisation": -1 }
+                    },
+                    {
+                        text: "Je reporte les projets moins importants.",
+                        effects: { "Organisation": 1 }
+                    }
+                ]
+            },
+            {
+                text: "Un collègue propose une idée nouvelle mais risquée. Que faites-vous ?",
+                options: [
+                    {
+                        text: "J'encourage l'idée et aide à l'améliorer.",
+                        effects: { "Créativité": 2, "Collaboration": 1 }
+                    },
+                    {
+                        text: "Je discute des avantages et des risques.",
+                        effects: { "Analyse": 1 }
+                    },
+                    {
+                        text: "Je préfère ne pas prendre de risques.",
+                        effects: { "Flexibilité": -1 }
+                    },
+                    {
+                        text: "Je rejette l'idée immédiatement.",
+                        effects: { "Créativité": -1 }
+                    }
+                ]
+            }
         ];
 
         let currentQuestionIndex = 0;
@@ -130,16 +530,10 @@
             "Apprentissage": 0,
             "Empathie": 0,
             "Adaptabilité": 0,
-            "Initiative": 0
+            "Initiative": 0,
+            "Communication": 0,
+            "Responsabilité": 0
         };
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
 
         function showQuestion() {
             const questionContainer = document.getElementById("question-container");
@@ -149,12 +543,10 @@
                 const question = questions[currentQuestionIndex];
                 questionContainer.textContent = question.text;
 
-                const shuffledOptions = shuffleArray([...question.options]);
-
-                answersContainer.innerHTML = shuffledOptions
+                answersContainer.innerHTML = question.options
                     .map(
-                        (option) =>
-                            `<button onclick="submitAnswer('${option}')">${option}</button>`
+                        (option, index) =>
+                            `<button onclick="submitAnswer(${index})">${option.text}</button>`
                     )
                     .join("");
             } else {
@@ -162,11 +554,17 @@
             }
         }
 
-        function submitAnswer(selectedOption) {
+        function submitAnswer(optionIndex) {
             const question = questions[currentQuestionIndex];
-            question.dimensions.forEach((dimension) => {
-                results[dimension] += question.options.indexOf(selectedOption) + 1;
-            });
+            const selectedOption = question.options[optionIndex];
+
+            for (let dimension in selectedOption.effects) {
+                if (results.hasOwnProperty(dimension)) {
+                    results[dimension] += selectedOption.effects[dimension];
+                } else {
+                    results[dimension] = selectedOption.effects[dimension];
+                }
+            }
 
             currentQuestionIndex++;
             showQuestion();
@@ -183,9 +581,26 @@
         }
 
         function generateResultBars() {
+            const maxScores = {
+                "Flexibilité": 10,
+                "Collaboration": 14,
+                "Gestion du Stress": 4,
+                "Analyse": 6,
+                "Résilience": 6,
+                "Organisation": 6,
+                "Leadership": 8,
+                "Créativité": 4,
+                "Apprentissage": 5,
+                "Empathie": 4,
+                "Adaptabilité": 5,
+                "Initiative": 7,
+                "Communication": 4,
+                "Responsabilité": 1
+            };
+
             return Object.entries(results)
                 .map(([dimension, score]) => {
-                    const percentage = (score / (questions.length * 5)) * 100;
+                    const percentage = (score / maxScores[dimension]) * 100;
                     const barColor =
                         percentage >= 75
                             ? "green"
@@ -206,17 +621,33 @@
 
         function downloadResults() {
             const report = `
-                Résultats du Test d'adaptation au changement
-                ---------------------------------------------
-                ${Object.entries(results)
-                    .map(
-                        ([dimension, score]) =>
-                            `${dimension}: ${score} points (${(
-                                (score / (questions.length * 5)) *
-                                100
-                            ).toFixed(2)}%)`
-                    )
-                    .join("\n")}
+Résultats du Test d'adaptation au changement
+---------------------------------------------
+${Object.entries(results)
+    .map(
+        ([dimension, score]) =>
+            `${dimension}: ${score} points (${(
+                (score /
+                    {
+                        "Flexibilité": 10,
+                        "Collaboration": 14,
+                        "Gestion du Stress": 4,
+                        "Analyse": 6,
+                        "Résilience": 6,
+                        "Organisation": 6,
+                        "Leadership": 8,
+                        "Créativité": 4,
+                        "Apprentissage": 5,
+                        "Empathie": 4,
+                        "Adaptabilité": 5,
+                        "Initiative": 7,
+                        "Communication": 4,
+                        "Responsabilité": 1
+                    }[dimension]) *
+                100
+            ).toFixed(2)}%)`
+    )
+    .join("\n")}
             `;
 
             const blob = new Blob([report], { type: "text/plain" });
