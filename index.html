@@ -3,177 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test d'Adaptabilité au Changement</title>
+    <title>Test RH Avancé</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f7f7f7;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
         }
         .card {
             max-width: 700px;
             margin: 0 auto;
-            background: #fff;
+            background: #1e1e1e;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .title {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
+            color: #00ff7f;
         }
         .question {
-            margin: 20px 0;
             font-size: 18px;
+            margin: 20px 0;
         }
         .answers button {
             display: block;
             width: 100%;
-            padding: 10px;
             margin: 10px 0;
+            padding: 10px;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #007bff;
-            color: white;
+            color: #ffffff;
         }
-        .answers button:hover {
-            background-color: #0056b3;
+        .answers button.agree {
+            background-color: #28a745; /* Vert pour d'accord */
+        }
+        .answers button.agree:hover {
+            background-color: #218838;
+        }
+        .answers button.neutral {
+            background-color: #6c757d; /* Gris pour neutre */
+        }
+        .answers button.neutral:hover {
+            background-color: #5a6268;
+        }
+        .answers button.disagree {
+            background-color: #ff9800; /* Orange pour pas d'accord */
+        }
+        .answers button.disagree:hover {
+            background-color: #e68900;
         }
         .results {
             text-align: center;
             margin-top: 20px;
         }
         .download-btn {
-            display: block;
-            margin: 20px auto;
+            display: inline-block;
+            margin-top: 20px;
             padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            border: none;
+            background-color: #00ff7f;
+            color: #000;
+            text-decoration: none;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
         }
         .download-btn:hover {
-            background-color: #218838;
+            background-color: #00cc66;
         }
     </style>
 </head>
 <body>
     <div class="card">
-        <div id="quiz-section">
-            <h1 class="title">Test d'Adaptabilité au Changement</h1>
-            <div id="question-container" class="question"></div>
-            <div id="answers" class="answers"></div>
-        </div>
-        <div id="results-section" class="hidden">
-            <h2 class="title">Résultats</h2>
-            <p id="score-display"></p>
-            <div id="category-results"></div>
-            <div id="recommendations"></div>
-            <button class="download-btn" onclick="downloadResults()">Télécharger mon rapport</button>
-        </div>
+        <h1 class="title">Test RH Avancé</h1>
+        <div id="question-container" class="question"></div>
+        <div id="answers" class="answers"></div>
     </div>
 
     <script>
         const questions = [
-            { text: "Je m'adapte rapidement à de nouveaux outils ou processus.", category: "Flexibilité" },
-            { text: "Je trouve des solutions innovantes face à des problèmes inattendus.", category: "Innovation" },
-            { text: "Je reste calme et efficace sous pression.", category: "Gestion du Stress" },
-            { text: "Je modifie mes priorités en fonction des besoins de l'entreprise.", category: "Flexibilité" },
-            { text: "Je propose souvent des idées pour améliorer les processus.", category: "Innovation" }
+            { text: "Un collègue change de méthode sans vous prévenir. Quelle est votre réaction ?", dimensions: ["Flexibilité", "Collaboration"] },
+            { text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?", dimensions: ["Gestion du Stress", "Analyse"] },
+            { text: "Un projet nécessite de remettre en cause une règle établie. Quelle est votre position ?", dimensions: ["Créativité", "Analyse"] },
+            { text: "Un conflit éclate dans votre équipe. Que faites-vous ?", dimensions: ["Collaboration", "Gestion du Stress"] }
         ];
 
-        const categories = {
+        const results = {
             "Flexibilité": 0,
-            "Innovation": 0,
-            "Gestion du Stress": 0
+            "Collaboration": 0,
+            "Gestion du Stress": 0,
+            "Analyse": 0,
+            "Créativité": 0
         };
 
         let currentQuestionIndex = 0;
-        let totalScore = 0;
 
         function showQuestion() {
             const questionContainer = document.getElementById("question-container");
             const answersContainer = document.getElementById("answers");
-            const currentQuestion = questions[currentQuestionIndex];
 
-            questionContainer.textContent = currentQuestion.text;
-            answersContainer.innerHTML = `
-                <button onclick="submitAnswer(1)">Pas du tout d'accord</button>
-                <button onclick="submitAnswer(2)">Plutôt pas d'accord</button>
-                <button onclick="submitAnswer(3)">Neutre</button>
-                <button onclick="submitAnswer(4)">Plutôt d'accord</button>
-                <button onclick="submitAnswer(5)">Tout à fait d'accord</button>
-            `;
-        }
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                questionContainer.textContent = question.text;
 
-        function submitAnswer(points) {
-            const currentQuestion = questions[currentQuestionIndex];
-            totalScore += points;
-            categories[currentQuestion.category] += points;
-
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                showQuestion();
+                answersContainer.innerHTML = `
+                    <button class="agree" onclick="submitAnswer(5)">Tout à fait d'accord</button>
+                    <button class="agree" onclick="submitAnswer(4)">Plutôt d'accord</button>
+                    <button class="neutral" onclick="submitAnswer(3)">Neutre</button>
+                    <button class="disagree" onclick="submitAnswer(2)">Plutôt pas d'accord</button>
+                    <button class="disagree" onclick="submitAnswer(1)">Pas du tout d'accord</button>
+                `;
             } else {
                 showResults();
             }
         }
 
+        function submitAnswer(score) {
+            const question = questions[currentQuestionIndex];
+            question.dimensions.forEach(dimension => {
+                results[dimension] += score;
+            });
+
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
         function showResults() {
-            document.getElementById("quiz-section").classList.add("hidden");
-            document.getElementById("results-section").classList.remove("hidden");
+            const card = document.querySelector('.card');
+            const totalQuestions = questions.length;
 
-            const scoreDisplay = document.getElementById("score-display");
-            const categoryResults = document.getElementById("category-results");
-            const recommendations = document.getElementById("recommendations");
-
-            scoreDisplay.textContent = `Votre score total : ${totalScore} sur ${questions.length * 5}`;
-
-            let categoryDetails = "";
-            for (let category in categories) {
-                categoryDetails += `<p><strong>${category} :</strong> ${categories[category]} sur ${(questions.filter(q => q.category === category).length * 5)}</p>`;
-            }
-            categoryResults.innerHTML = categoryDetails;
-
-            recommendations.innerHTML = `
-                <h3>Recommandations :</h3>
-                ${getRecommendations(totalScore)}
+            card.innerHTML = `
+                <h1 class="title">Résultats</h1>
+                <p>Voici vos scores par catégorie :</p>
+                <ul>
+                    ${Object.entries(results).map(([dimension, score]) => `<li><strong>${dimension} :</strong> ${score} / ${(totalQuestions * 5) / 2}</li>`).join('')}
+                </ul>
+                <p><strong>Analyse :</strong> ${getAnalysis()}</p>
+                <a href="#" class="download-btn" onclick="downloadResults()">Télécharger le rapport</a>
             `;
         }
 
-        function getRecommendations(score) {
-            if (score >= 20) {
-                return "<p>Votre adaptabilité est excellente ! Continuez à cultiver cette force.</p>";
-            } else if (score >= 15) {
-                return "<p>Votre adaptabilité est bonne, mais il y a des axes d'amélioration.</p>";
-            } else {
-                return "<p>Travaillez sur votre flexibilité et votre gestion du stress pour mieux vous adapter.</p>";
+        function getAnalysis() {
+            const highScores = Object.entries(results).filter(([_, score]) => score >= 8);
+            if (highScores.length === 0) {
+                return "Vous avez plusieurs axes d'amélioration. Travaillez sur votre flexibilité et votre gestion du stress.";
             }
+            return `Vous excellez dans : ${highScores.map(([dimension]) => dimension).join(", ")}. Continuez à cultiver ces compétences !`;
         }
 
         function downloadResults() {
-            const results = questions.map((q, i) => `Question ${i + 1}: ${q.text}\nCatégorie : ${q.category}\nScore : ${categories[q.category]}`).join("\n\n");
-            const total = `\n\nScore total : ${totalScore} sur ${questions.length * 5}`;
-            const details = `\n\nDétails par catégorie :\n${Object.entries(categories).map(([cat, score]) => `${cat}: ${score}`).join("\n")}`;
+            const totalQuestions = questions.length;
+            const details = Object.entries(results)
+                .map(([dimension, score]) => `${dimension}: ${score} / ${(totalQuestions * 5) / 2}`)
+                .join("\n");
 
-            const blob = new Blob([results + total + details], { type: "text/plain" });
+            const analysis = getAnalysis();
+
+            const report = `
+                Résultats du Test RH Avancé
+                ---------------------------
+                ${details}
+
+                Analyse :
+                ${analysis}
+            `;
+
+            const blob = new Blob([report], { type: "text/plain" });
             const url = URL.createObjectURL(blob);
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "rapport_test_adaptabilite.txt";
+            a.download = "rapport_test_rh.txt";
             a.click();
 
             URL.revokeObjectURL(url);
         }
 
+        // Lancer le test
         showQuestion();
     </script>
 </body>
