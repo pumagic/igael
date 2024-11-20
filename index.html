@@ -90,7 +90,23 @@
             { text: "Un collègue change de méthode sans vous prévenir. Quelle est votre réaction ?", dimensions: ["Flexibilité", "Collaboration"] },
             { text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?", dimensions: ["Gestion du Stress", "Analyse"] },
             { text: "Un projet nécessite de remettre en cause une règle établie. Quelle est votre position ?", dimensions: ["Créativité", "Analyse"] },
-            { text: "Un conflit éclate dans votre équipe. Que faites-vous ?", dimensions: ["Collaboration", "Gestion du Stress"] }
+            { text: "Un conflit éclate dans votre équipe. Que faites-vous ?", dimensions: ["Collaboration", "Gestion du Stress"] },
+            { text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?", dimensions: ["Résilience", "Flexibilité"] },
+            { text: "On vous demande de travailler sur un nouveau projet en dehors de vos compétences. Que faites-vous ?", dimensions: ["Créativité", "Collaboration"] },
+            { text: "Vous devez gérer plusieurs tâches simultanément. Quelle est votre stratégie ?", dimensions: ["Gestion du Stress", "Flexibilité"] },
+            { text: "Un collègue propose une idée totalement différente de la vôtre. Que faites-vous ?", dimensions: ["Collaboration", "Analyse"] },
+            { text: "Comment réagissez-vous face à un changement de dernière minute ?", dimensions: ["Flexibilité", "Résilience"] },
+            { text: "On vous demande d'innover pour un projet important. Comment procédez-vous ?", dimensions: ["Créativité", "Analyse"] },
+            { text: "Vous devez présenter un projet devant un groupe important. Quelle est votre attitude ?", dimensions: ["Gestion du Stress", "Collaboration"] },
+            { text: "Un problème technique bloque un projet. Quelle est votre réaction ?", dimensions: ["Analyse", "Résilience"] },
+            { text: "Un client critique fortement votre travail. Que faites-vous ?", dimensions: ["Résilience", "Collaboration"] },
+            { text: "Vous êtes chargé de coordonner une équipe avec des points de vue divergents. Comment procédez-vous ?", dimensions: ["Collaboration", "Flexibilité"] },
+            { text: "Une deadline importante est avancée. Quelle est votre réaction ?", dimensions: ["Gestion du Stress", "Résilience"] },
+            { text: "Vous devez expliquer une décision difficile à votre équipe. Comment vous y prenez-vous ?", dimensions: ["Analyse", "Collaboration"] },
+            { text: "Vous avez l'opportunité de prendre des responsabilités supplémentaires. Que faites-vous ?", dimensions: ["Flexibilité", "Créativité"] },
+            { text: "Un collègue vous demande de l'aider sur un projet en retard. Que faites-vous ?", dimensions: ["Collaboration", "Résilience"] },
+            { text: "Vous remarquez une erreur dans un processus clé. Quelle est votre réaction ?", dimensions: ["Analyse", "Flexibilité"] },
+            { text: "Vous devez travailler avec une personne ayant des habitudes très différentes des vôtres. Que faites-vous ?", dimensions: ["Collaboration", "Résilience"] }
         ];
 
         const results = {
@@ -98,7 +114,8 @@
             "Collaboration": 0,
             "Gestion du Stress": 0,
             "Analyse": 0,
-            "Créativité": 0
+            "Créativité": 0,
+            "Résilience": 0
         };
 
         let currentQuestionIndex = 0;
@@ -149,7 +166,7 @@
         }
 
         function getAnalysis() {
-            const highScores = Object.entries(results).filter(([_, score]) => score >= 8);
+            const highScores = Object.entries(results).filter(([_, score]) => score >= 50);
             if (highScores.length === 0) {
                 return "Vous avez plusieurs axes d'amélioration. Travaillez sur votre flexibilité et votre gestion du stress.";
             }
@@ -189,3 +206,4 @@
     </script>
 </body>
 </html>
+
