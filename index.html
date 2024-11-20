@@ -44,7 +44,6 @@
             cursor: pointer;
             font-weight: bold;
         }
-        /* Boutons colorés */
         .answers button.agree {
             background-color: #28a745; /* Vert pour accord */
             color: #ffffff; /* Texte blanc */
@@ -66,7 +65,6 @@
         .answers button.disagree:hover {
             background-color: #e68900; /* Orange foncé */
         }
-        /* Résultats avec jauges */
         .results {
             text-align: center;
             margin-top: 20px;
@@ -91,7 +89,6 @@
         .progress-bar.red {
             background-color: #dc3545; /* Rouge */
         }
-        /* Bouton de téléchargement */
         .download-btn {
             display: inline-block;
             margin-top: 20px;
@@ -115,48 +112,28 @@
     </div>
 
     <script>
-        /* Questions du test */
+        /* Questions complètes */
         const questions = [
-            {
-                text: "Un collègue change de méthode sans vous prévenir. Quelle est votre réaction ?",
-                dimensions: ["Flexibilité", "Collaboration"],
-                options: [
-                    "J'adapte ma méthode immédiatement.",
-                    "Je propose une discussion.",
-                    "Je continue avec ma méthode.",
-                    "Je demande des clarifications."
-                ]
-            },
-            {
-                text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?",
-                dimensions: ["Gestion du Stress", "Analyse"],
-                options: [
-                    "Je me concentre et travaille rapidement.",
-                    "J'analyse calmement la situation.",
-                    "Je demande de l'aide.",
-                    "Je repousse la tâche."
-                ]
-            },
-            {
-                text: "Un conflit éclate dans votre équipe. Que faites-vous ?",
-                dimensions: ["Collaboration", "Gestion du Stress"],
-                options: [
-                    "J'interviens immédiatement.",
-                    "J'observe avant d'agir.",
-                    "Je délègue à un supérieur.",
-                    "Je laisse l'équipe gérer."
-                ]
-            },
-            {
-                text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?",
-                dimensions: ["Résilience", "Flexibilité"],
-                options: [
-                    "Je prends le retour comme une opportunité.",
-                    "Je discute pour clarifier.",
-                    "Je me sens démotivé.",
-                    "J'ignore le retour."
-                ]
-            }
+            { text: "Un collègue change de méthode sans vous prévenir. Quelle est votre réaction ?", dimensions: ["Flexibilité", "Collaboration"] },
+            { text: "Vous recevez un retour négatif sur votre travail. Quelle est votre réaction ?", dimensions: ["Résilience", "Flexibilité"] },
+            { text: "On vous demande de résoudre un problème inattendu en 1 heure. Que faites-vous ?", dimensions: ["Gestion du Stress", "Analyse"] },
+            { text: "Un conflit éclate dans votre équipe. Que faites-vous ?", dimensions: ["Collaboration", "Gestion du Stress"] },
+            { text: "Vous êtes chargé(e) d'un projet de dernière minute. Comment gérez-vous la situation ?", dimensions: ["Gestion du Stress", "Organisation"] },
+            { text: "Vous apprenez qu'une erreur coûteuse a été commise par votre équipe. Quelle est votre première action ?", dimensions: ["Leadership", "Gestion du Stress"] },
+            { text: "On vous propose une méthode radicalement différente pour effectuer votre travail. Quelle est votre approche ?", dimensions: ["Flexibilité", "Créativité"] },
+            { text: "Vous devez collaborer avec une personne ayant des idées opposées aux vôtres. Comment réagissez-vous ?", dimensions: ["Collaboration", "Résilience"] },
+            { text: "Une tâche doit être réalisée rapidement avec peu d'instructions. Comment procédez-vous ?", dimensions: ["Analyse", "Initiative"] },
+            { text: "Un changement majeur est annoncé dans votre organisation. Quelle est votre réaction ?", dimensions: ["Adaptabilité", "Flexibilité"] },
+            { text: "Votre supérieur vous demande un rapport complet en urgence. Que faites-vous ?", dimensions: ["Organisation", "Gestion du Stress"] },
+            { text: "Vous découvrez un conflit latent entre deux membres de votre équipe. Comment intervenez-vous ?", dimensions: ["Leadership", "Collaboration"] },
+            { text: "On vous demande d'utiliser un nouvel outil technologique que vous ne maîtrisez pas. Comment réagissez-vous ?", dimensions: ["Apprentissage", "Flexibilité"] },
+            { text: "Votre collègue critique ouvertement votre travail en réunion. Que faites-vous ?", dimensions: ["Résilience", "Collaboration"] },
+            { text: "On vous confie un projet complexe sans beaucoup de ressources. Comment le gérez-vous ?", dimensions: ["Initiative", "Analyse"] },
+            { text: "Vous remarquez une baisse de motivation dans votre équipe. Quelle est votre approche ?", dimensions: ["Leadership", "Empathie"] },
+            { text: "On vous demande d'implémenter un changement sans explication claire. Que faites-vous ?", dimensions: ["Flexibilité", "Créativité"] },
+            { text: "Vous avez plusieurs tâches importantes à accomplir simultanément. Comment vous organisez-vous ?", dimensions: ["Organisation", "Gestion du Stress"] },
+            { text: "Votre équipe exprime des inquiétudes face à un changement imminent. Comment les gérez-vous ?", dimensions: ["Leadership", "Empathie"] },
+            { text: "Vous êtes confronté(e) à une situation que vous ne comprenez pas. Quelle est votre première action ?", dimensions: ["Analyse", "Apprentissage"] }
         ];
 
         let currentQuestionIndex = 0;
@@ -165,10 +142,17 @@
             "Collaboration": 0,
             "Gestion du Stress": 0,
             "Analyse": 0,
-            "Résilience": 0
+            "Résilience": 0,
+            "Organisation": 0,
+            "Leadership": 0,
+            "Créativité": 0,
+            "Apprentissage": 0,
+            "Empathie": 0,
+            "Adaptabilité": 0,
+            "Initiative": 0
         };
 
-        /* Afficher les questions */
+        /* Afficher une question */
         function showQuestion() {
             const questionContainer = document.getElementById("question-container");
             const answersContainer = document.getElementById("answers");
@@ -177,18 +161,19 @@
                 const question = questions[currentQuestionIndex];
                 questionContainer.textContent = question.text;
 
-                answersContainer.innerHTML = question.options
-                    .map(
-                        (option, index) =>
-                            `<button onclick="submitAnswer(${index + 1})">${option}</button>`
-                    )
-                    .join("");
+                answersContainer.innerHTML = `
+                    <button class="agree" onclick="submitAnswer(5)">Tout à fait d'accord</button>
+                    <button class="agree" onclick="submitAnswer(4)">Plutôt d'accord</button>
+                    <button class="neutral" onclick="submitAnswer(3)">Neutre</button>
+                    <button class="disagree" onclick="submitAnswer(2)">Plutôt pas d'accord</button>
+                    <button class="disagree" onclick="submitAnswer(1)">Pas du tout d'accord</button>
+                `;
             } else {
                 showResults();
             }
         }
 
-        /* Enregistrer les réponses */
+        /* Enregistrer la réponse */
         function submitAnswer(score) {
             const question = questions[currentQuestionIndex];
             question.dimensions.forEach((dimension) => {
@@ -199,7 +184,7 @@
             showQuestion();
         }
 
-        /* Afficher les résultats avec jauges */
+        /* Afficher les résultats */
         function showResults() {
             const card = document.querySelector(".card");
 
@@ -264,4 +249,3 @@
     </script>
 </body>
 </html>
-
